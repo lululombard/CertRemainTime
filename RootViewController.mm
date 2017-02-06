@@ -90,10 +90,6 @@
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
 			[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
 			NSDate *dateTemp = [dateFormat dateFromString:expireDateTemp];
-			NSLog(@"[CertRemainTime] Date expiration %@", dateTemp);
-			NSLog(@"[CertRemainTime] Date temp %@", date);
-			NSLog(@"[CertRemainTime] date <= 0 %@", date <= 0 ? @"Yup" : @"Nope");
-			NSLog(@"[CertRemainTime] [dateTemp compare:date] == NSOrderedDescending %@", [dateTemp compare:date] == NSOrderedDescending ? @"Yup" : @"Nope");
 			if (date <= 0 || [dateTemp compare:date] == NSOrderedDescending) {
 				date = dateTemp;
 				NSLog(@"[CertRemainTime] New date ! %@", date);
@@ -103,6 +99,8 @@
 
 	if (date > 0) {
 		NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+		NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
+		date = [date dateByAddingTimeInterval:timeZoneSeconds];
 		[dateFormat setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
 		expireDate = [dateFormat stringFromDate:date];
 	}
