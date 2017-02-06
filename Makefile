@@ -8,6 +8,3 @@ CertRemainTime_FRAMEWORKS = UIKit CoreGraphics
 ADDITIONAL_OBJCFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/application.mk
-
-after-install::
-	install.exec "uicache"
