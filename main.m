@@ -2,8 +2,6 @@
 
 int main(int argc, char **argv) {
     @autoreleasepool {
-		return UIApplicationMain(argc, argv, @"helloworldApplication", @"helloworldApplication");
+		return UIApplicationMain(argc, argv, @"certremaintimeApplication", @"certremaintimeApplication");
 	}
 }
-
-// vim:ft=objc

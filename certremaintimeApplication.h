@@ -2,9 +2,8 @@
 
 #import "RootViewController.h"
 
-@interface helloworldApplication: UIApplication <UIApplicationDelegate>
+@interface certremaintimeApplication: UIApplication <UIApplicationDelegate>
 
 @property (nonatomic, retain) UIWindow *window;
 
 @end
-// vim:ft=objc

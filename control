@@ -1,9 +1,8 @@
-Package: com.yourcompany.helloworld
-Name: helloworld
-Depends: 
+Package: fr.lululombard.certremaintime
+Name: CertRenameTime
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome application!
-Maintainer: eon
-Author: eon
+Description: An app to check how much time is remaining for your yalu cert
+Maintainer: lululombard <contact@lululombard.fr>
+Author: lululombard <contact@lululombard.fr>
 Section: Utilities
