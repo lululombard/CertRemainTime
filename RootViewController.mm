@@ -18,7 +18,6 @@
 - (void)loadView {
 	NSFileManager *filemgr;
 	NSString *expireDate = @"-1";
-	NSString *timeRemaining;
 
 	filemgr = [[NSFileManager alloc] init];
 	[filemgr changeCurrentDirectoryPath:@"/var/MobileDevice/ProvisioningProfiles/"];
@@ -32,7 +31,7 @@
 		NSLog(@"CertRemainTime : %@", fullFileName);
 		NSError *err;
 		NSString *stringContent = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:&err];
-		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound) {
+		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound || [stringContent rangeOfString:@"CY- mach portal"].location != NSNotFound) {
 			expireDate = @"-2";
 			if ([stringContent rangeOfString:@"ExpirationDate</key>\n"].location == NSNotFound) {
 				expireDate = @"-3";
@@ -97,7 +96,7 @@
 	/* Constraints */
 	NSDictionary *viewDict = NSDictionaryOfVariableBindings(label1, label2, topSpace, bottomSpace);
 
-	[self.view addConstraint: [NSLayoutConstraint 
+	[self.view addConstraint: [NSLayoutConstraint
 		constraintWithItem:label1
 		attribute:NSLayoutAttributeCenterX
 		relatedBy:NSLayoutRelationEqual
@@ -107,7 +106,7 @@
 		constant:0
 	]];
 
-	[self.view addConstraint: [NSLayoutConstraint 
+	[self.view addConstraint: [NSLayoutConstraint
 		constraintWithItem:label2
 		attribute:NSLayoutAttributeCenterX
 		relatedBy:NSLayoutRelationEqual
