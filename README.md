@@ -6,6 +6,11 @@ Compiled with LLVM+Clang on an iPhone 5s running iOS 10.2.
 
 The icon is not really mine but it was licenced under wtfpl so no big deal.
 
+# Installation
+
+Download [the deb package](https://github.com/lululombard/CertTimeRemaining/blob/master/certremaintime.deb?raw=true) and install it using `dpkg -i 
+certremaintime.deb` as root.
+
 # Known issues
 
 The icon may not show up, run `uicache` as mobile or `su mobile -c uicache` as root, in your terminal, if this issue occurs.
