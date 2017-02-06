@@ -1,26 +1,39 @@
 # CertTimeManager by lululombard
 
-This crapy tool tells you when your yalu102 will expire.
+![Logo](https://raw.githubusercontent.com/lululombard/CertTimeRemaining/master/Resources/Icon%402x.png)
 
-Compiled with LLVM+Clang on an iPhone 5s running iOS 10.2.
+This tool tells you when your yalu102/mach portal/Home Depot will expire.
 
-The icon is not really mine but it was licenced under wtfpl so no big deal.
+It only works if you installed it with Cydia Impactor.
 
 # Installation
 
-Download [the deb package](https://github.com/lululombard/CertTimeRemaining/blob/master/certremaintime.deb?raw=true) and install it using `dpkg -i 
-certremaintime.deb` as root.
+This package is available from my repo at [http://apt.lululombard.fr](http://apt.lululombard.fr/) but you can also download the .deb from this GitHub repo.
 
-# Known issues
+# What's next
 
-The icon may not show up, run `uicache` as mobile or `su mobile -c uicache` as root, in your terminal, if this issue occurs.
+Badge on the app with the number of days remaining
+
+Notifications 24h, 12h, 6h and 1h before expiration
 
 # Screenshots
 
-![SB icon](http://up.kingdomhills.fr/24933353979379756)
-
 ![App running on 2 devices](http://up.kingdomhills.fr/24933353979379757)
 
-This package is also licensed under wtfpl.
+# Contributors
+
+DaniWinter for the mach portal compatibility and the uicache (thanks to razer86 too for the mach portal string)
+
+Fields for the Home Depot cert that allowed me to add the compatibility with this tool.
+
+HunterStanton (he added the licence that forgot at 2 AM)
+
+# More info
+
+This package is also licensed under WTFPL.
+
+Compiled with LLVM+Clang on an iPhone 5s running iOS 10.2.
+
+The icon is not really mine but it was licenced under WTFPL so no big deal.
 
 I appologize if my english is so bad that what I write does not makes sense.

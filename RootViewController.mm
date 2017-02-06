@@ -18,7 +18,7 @@
 - (void)loadView {
 	NSFileManager *filemgr;
 	NSString *expireDate = @"-1";
-	//NSString *timeRemaining;
+	NSDate *date;
 
 	filemgr = [[NSFileManager alloc] init];
 	[filemgr changeCurrentDirectoryPath:@"/var/MobileDevice/ProvisioningProfiles/"];
@@ -32,7 +32,9 @@
 		NSLog(@"CertRemainTime : %@", fullFileName);
 		NSError *err;
 		NSString *stringContent = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:&err];
-		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound || [stringContent rangeOfString:@"mach portal"].location != NSNotFound) {
+		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound || 
+			[stringContent rangeOfString:@"mach portal"].location != NSNotFound || 
+			[stringContent rangeOfString:@"Home Depot"].location != NSNotFound) {
 			expireDate = @"-2";
 			if ([stringContent rangeOfString:@"ExpirationDate</key>\n"].location == NSNotFound) {
 				expireDate = @"-3";
@@ -41,13 +43,16 @@
 				expireDate = [stringContent componentsSeparatedByString:@"ExpirationDate</key>\n"][1];
 				expireDate = [expireDate componentsSeparatedByString:@"<date>"][1];
 				expireDate = [expireDate componentsSeparatedByString:@"</date>"][0];
-				NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-				[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-				NSDate *date = [dateFormat dateFromString:expireDate];
+				NSDateFormatter *dateFormat1 = [[NSDateFormatter alloc]init];
+				[dateFormat1 setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+				NSDate *dateTemp = [dateFormat1 dateFromString:expireDate];
 				NSLog(@"CertRemainTime : %@", date);
-				[dateFormat setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
-				expireDate = [dateFormat stringFromDate:date];
-				break;
+				if (date <= 0 || [dateTemp compare:date] == NSOrderedDescending) {
+					date = dateTemp;
+					NSDateFormatter *dateFormat2 = [[NSDateFormatter alloc]init];
+					[dateFormat2 setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
+					expireDate = [dateFormat2 stringFromDate:date];
+				}
 			}
 		}
 		NSLog(@"CertRemainTime : %@", stringContent);
@@ -67,7 +72,7 @@
 	label1.textAlignment = NSTextAlignmentCenter;
 	if ([expireDate isEqual:@"-1"]) [label1 setText:@"no cert found"];
 	else if ([expireDate isEqual:@"-2"]) [label1 setText:@"no cert"];
-	else [label1 setText:@"yalu will expire"];
+	else [label1 setText:@"jb will expire on"];
 	[label1 sizeToFit];
 	label1.translatesAutoresizingMaskIntoConstraints = NO;
 	[label1 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -79,7 +84,7 @@
 	label2.backgroundColor = [UIColor clearColor];
 	label2.textAlignment = NSTextAlignmentCenter;
 	if ([expireDate isEqual:@"-1"]) [label2 setText:@"(really, no cert at all)"];
-	else if ([expireDate isEqual:@"-2"]) [label2 setText:@"gave info about yalu"];
+	else if ([expireDate isEqual:@"-2"]) [label2 setText:@"gave info about your jb"];
 	else [label2 setText:expireDate];
 	[label2 sizeToFit];
 	label2.translatesAutoresizingMaskIntoConstraints = NO;

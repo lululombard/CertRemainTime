@@ -1,8 +1,8 @@
 Package: fr.lululombard.certremaintime
 Name: CertRemainTime
-Version: 1.0
+Version: 1.2
 Architecture: iphoneos-arm
-Description: An app to check how much time is remaining for your yalu cert
+Description: An app to check how much time is remaining for your jb tool cert
 Maintainer: lululombard <contact@lululombard.fr>
 Author: lululombard <contact@lululombard.fr>
 Section: Utilities
