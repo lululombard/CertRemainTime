@@ -32,9 +32,13 @@
 		NSLog(@"CertRemainTime : %@", fullFileName);
 		NSError *err;
 		NSString *stringContent = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:&err];
-		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound || 
+		if ([stringContent rangeOfString:@"yalu"].location != NSNotFound || 
+			[stringContent rangeOfString:@"mach_portal"].location != NSNotFound || 
+			[stringContent rangeOfString:@"mach-portal"].location != NSNotFound || 
+			[stringContent rangeOfString:@"machportal"].location != NSNotFound || 
 			[stringContent rangeOfString:@"mach portal"].location != NSNotFound || 
-			[stringContent rangeOfString:@"Home Depot"].location != NSNotFound) {
+			[stringContent rangeOfString:@"Home Depot"].location != NSNotFound)
+		{
 			if ([expireDate isEqual:@"-1"]) expireDate = @"-2";
 			if ([stringContent rangeOfString:@"ExpirationDate</key>\n"].location == NSNotFound) {
 				if ([expireDate isEqual:@"-1"] || [expireDate isEqual:@"-2"]) expireDate = @"-3";
