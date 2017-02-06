@@ -35,17 +35,17 @@
 		if ([stringContent rangeOfString:@"yalu102"].location != NSNotFound || 
 			[stringContent rangeOfString:@"mach portal"].location != NSNotFound || 
 			[stringContent rangeOfString:@"Home Depot"].location != NSNotFound) {
-			expireDate = @"-2";
+			if ([expireDate isEqual:@"-1"]) expireDate = @"-2";
 			if ([stringContent rangeOfString:@"ExpirationDate</key>\n"].location == NSNotFound) {
-				expireDate = @"-3";
+				if ([expireDate isEqual:@"-1"] || [expireDate isEqual:@"-2"]) expireDate = @"-3";
 			}
 			else {
-				expireDate = [stringContent componentsSeparatedByString:@"ExpirationDate</key>\n"][1];
-				expireDate = [expireDate componentsSeparatedByString:@"<date>"][1];
-				expireDate = [expireDate componentsSeparatedByString:@"</date>"][0];
+				NSString *expireDateTemp = [stringContent componentsSeparatedByString:@"ExpirationDate</key>\n"][1];
+				expireDateTemp = [expireDateTemp componentsSeparatedByString:@"<date>"][1];
+				expireDateTemp = [expireDateTemp componentsSeparatedByString:@"</date>"][0];
 				NSDateFormatter *dateFormat1 = [[NSDateFormatter alloc]init];
 				[dateFormat1 setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-				NSDate *dateTemp = [dateFormat1 dateFromString:expireDate];
+				NSDate *dateTemp = [dateFormat1 dateFromString:expireDateTemp];
 				NSLog(@"CertRemainTime : %@", date);
 				if (date <= 0 || [dateTemp compare:date] == NSOrderedDescending) {
 					date = dateTemp;
