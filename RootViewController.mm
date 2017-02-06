@@ -25,45 +25,90 @@
 
 	NSArray *dirContents = [filemgr contentsOfDirectoryAtPath:[filemgr currentDirectoryPath] error:nil];
 
-	NSLog(@"CertRemainTime : %@", [filemgr currentDirectoryPath]);
+	NSLog(@"[CertRemainTime] Now browsing %@", [filemgr currentDirectoryPath]);
 
 	for (NSString *fullFileName in dirContents) {
-		expireDate = @"-2";
-		NSLog(@"CertRemainTime : %@", fullFileName);
+		if ([expireDate isEqual:@"-1"]) expireDate = @"-2";
+		NSLog(@"[CertRemainTime] Reading plist file %@", fullFileName);
 		NSError *err;
 		NSString *stringContent = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:&err];
-		if ([stringContent rangeOfString:@"yalu"].location != NSNotFound || 
-			[stringContent rangeOfString:@"mach_portal"].location != NSNotFound || 
-			[stringContent rangeOfString:@"mach-portal"].location != NSNotFound || 
-			[stringContent rangeOfString:@"machportal"].location != NSNotFound || 
-			[stringContent rangeOfString:@"mach portal"].location != NSNotFound || 
-			[stringContent rangeOfString:@"Home Depot"].location != NSNotFound)
+		if (err > 0) NSLog(@"[CertRemainTime] Err %@", err);
+		if ([stringContent rangeOfString:@"<plist version=\"1.0\">"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the start of the plist file");
+			continue;
+		}
+		if ([stringContent rangeOfString:@"</plist>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the end of the plist file");
+			continue;
+		}
+		stringContent = [stringContent componentsSeparatedByString:@"<plist version=\"1.0\">"][1];
+		stringContent = [stringContent componentsSeparatedByString:@"</plist>"][0];
+		if ([stringContent rangeOfString:@"<key>AppIDName</key>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the AppIDName key");
+			continue;
+		}
+		if ([stringContent rangeOfString:@"<string>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the AppIDName string begining");
+			continue;
+		}
+		if ([stringContent rangeOfString:@"</string>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the AppIDName string end");
+			continue;
+		}
+		NSString *appIdName = [stringContent componentsSeparatedByString:@"<key>AppIDName</key>"][1];
+		appIdName = [appIdName componentsSeparatedByString:@"<string>"][1];
+		appIdName = [appIdName componentsSeparatedByString:@"</string>"][0];
+		NSLog(@"[CertRemainTime] AppIDName = %@", appIdName);
+		if ([stringContent rangeOfString:@"<key>ExpirationDate</key>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate key");
+			continue;
+		}
+		if ([stringContent rangeOfString:@"<date>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate date begining");
+			continue;
+		}
+		if ([stringContent rangeOfString:@"</date>"].location == NSNotFound) {
+			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate date end");
+			continue;
+		}
+		NSString *expireDateTemp = [stringContent componentsSeparatedByString:@"<key>ExpirationDate</key>\n"][1];
+		expireDateTemp = [expireDateTemp componentsSeparatedByString:@"<date>"][1];
+		expireDateTemp = [expireDateTemp componentsSeparatedByString:@"</date>"][0];
+		NSLog(@"[CertRemainTime] ExpirationDate = %@", expireDateTemp);
+
+		if ([appIdName rangeOfString:@"yalu"].location != NSNotFound || 
+			[appIdName rangeOfString:@"mach_portal"].location != NSNotFound || 
+			[appIdName rangeOfString:@"mach-portal"].location != NSNotFound || 
+			[appIdName rangeOfString:@"machportal"].location != NSNotFound || 
+			[appIdName rangeOfString:@"mach portal"].location != NSNotFound || 
+			[appIdName rangeOfString:@"home depot"].location != NSNotFound || 
+			[appIdName rangeOfString:@"homedepot"].location != NSNotFound || 
+			[appIdName rangeOfString:@"home_depot"].location != NSNotFound || 
+			[appIdName rangeOfString:@"home-depot"].location != NSNotFound || 
+			[appIdName rangeOfString:@"Home Depot"].location != NSNotFound)
 		{
-			if ([expireDate isEqual:@"-1"]) expireDate = @"-2";
-			if ([stringContent rangeOfString:@"ExpirationDate</key>\n"].location == NSNotFound) {
-				if ([expireDate isEqual:@"-1"] || [expireDate isEqual:@"-2"]) expireDate = @"-3";
-			}
-			else {
-				NSString *expireDateTemp = [stringContent componentsSeparatedByString:@"ExpirationDate</key>\n"][1];
-				expireDateTemp = [expireDateTemp componentsSeparatedByString:@"<date>"][1];
-				expireDateTemp = [expireDateTemp componentsSeparatedByString:@"</date>"][0];
-				NSDateFormatter *dateFormat1 = [[NSDateFormatter alloc]init];
-				[dateFormat1 setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-				NSDate *dateTemp = [dateFormat1 dateFromString:expireDateTemp];
-				NSLog(@"CertRemainTime : %@", date);
-				if (date <= 0 || [dateTemp compare:date] == NSOrderedDescending) {
-					date = dateTemp;
-					NSDateFormatter *dateFormat2 = [[NSDateFormatter alloc]init];
-					[dateFormat2 setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
-					expireDate = [dateFormat2 stringFromDate:date];
-				}
+			NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+			[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+			NSDate *dateTemp = [dateFormat dateFromString:expireDateTemp];
+			NSLog(@"[CertRemainTime] Date expiration %@", dateTemp);
+			NSLog(@"[CertRemainTime] Date temp %@", date);
+			NSLog(@"[CertRemainTime] date <= 0 %@", date <= 0 ? @"Yup" : @"Nope");
+			NSLog(@"[CertRemainTime] [dateTemp compare:date] == NSOrderedDescending %@", [dateTemp compare:date] == NSOrderedDescending ? @"Yup" : @"Nope");
+			if (date <= 0 || [dateTemp compare:date] == NSOrderedDescending) {
+				date = dateTemp;
+				NSLog(@"[CertRemainTime] New date ! %@", date);
 			}
 		}
-		NSLog(@"CertRemainTime : %@", stringContent);
-		NSLog(@"CertRemainTime : %@", err);
 	}
 
-	NSLog(@"CertRemainTime : %@", expireDate);
+	if (date > 0) {
+		NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+		[dateFormat setDateFormat:@"yyyy-MM-dd 'at' HH:mm"];
+		expireDate = [dateFormat stringFromDate:date];
+	}
+
+	NSLog(@"[CertRemainTime] Final date %@", date);
+	NSLog(@"[CertRemainTime] Human readable date %@", expireDate);
 
 	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
 	[[self view] setBackgroundColor:[UIColor whiteColor]];
