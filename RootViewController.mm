@@ -77,6 +77,7 @@
 		NSLog(@"[CertRemainTime] ExpirationDate = %@", expireDateTemp);
 
 		if ([appIdName rangeOfString:@"yalu"].location != NSNotFound || 
+			[appIdName rangeOfString:@"Yalu"].location != NSNotFound || 
 			[appIdName rangeOfString:@"mach_portal"].location != NSNotFound || 
 			[appIdName rangeOfString:@"mach-portal"].location != NSNotFound || 
 			[appIdName rangeOfString:@"machportal"].location != NSNotFound || 
