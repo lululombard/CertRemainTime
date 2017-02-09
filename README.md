@@ -1,6 +1,6 @@
-# CertTimeManager by lululombard
+# CertRemainTime by lululombard
 
-![Logo](https://raw.githubusercontent.com/lululombard/CertTimeRemaining/master/Resources/Icon%402x.png)
+![Logo](https://raw.githubusercontent.com/lululombard/CertRemainTime/master/Resources/Icon%402x.png)
 
 This tool tells you when your yalu102/mach portal/Home Depot will expire.
 
@@ -8,7 +8,10 @@ It only works if you installed it with Cydia Impactor.
 
 # Installation
 
-This package is available from my repo at [http://apt.lululombard.fr](http://apt.lululombard.fr/) but you can also download the .deb from this GitHub repo.
+This package is available from the default source BigBoss.
+
+Early updates are available from my repo at [http://apt.lululombard.fr](http://apt.lululombard.fr/) but you can also download the .deb from this 
+GitHub repo.
 
 # What's next
 
