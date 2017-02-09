@@ -213,7 +213,7 @@
 		if (days == 0 && hours == 0 && minutesBetween == 0) remaining = @"NOW !";
 		else {
 			if (days > 0) remaining = [remaining stringByAppendingString:[[NSString stringWithFormat:@"%i", days] stringByAppendingString:@" days"]];
-			if (hours > 0) {
+			if (days < 10 && hours > 0) {
 				if (![remaining isEqual:@""]) remaining = [remaining stringByAppendingString:(days == 0 && minutesBetween > 0) ? @", " : @" and "];
 				remaining = [remaining stringByAppendingString:[[NSString stringWithFormat:@"%i", hours] stringByAppendingString:@" hours"]];
 			}
