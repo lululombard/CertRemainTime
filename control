@@ -1,8 +1,8 @@
 Package: fr.lululombard.certremaintime
 Name: CertRemainTime
-Version: 1.7
+Version: 2.0
 Architecture: iphoneos-arm
-Description: An app to check how much time is remaining for your jb tool cert
+Description: Basic App to know when you'll need to resign your Jailbreak tool
 Maintainer: lululombard <contact@lululombard.fr>
 Author: lululombard <contact@lululombard.fr>
 Section: Utilities

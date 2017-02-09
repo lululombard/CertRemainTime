@@ -21,7 +21,7 @@ Notifications 24h, 12h, 6h and 1h before expiration
 
 # Screenshots
 
-![App running on 2 devices](http://up.kingdomhills.fr/24933353979379757)
+![App running on 3 devices](http://up.kingdomhills.fr/24933353979379759)
 
 # Contributors
 
