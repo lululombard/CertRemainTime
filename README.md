@@ -23,6 +23,22 @@ Notifications 24h, 12h, 6h and 1h before expiration
 
 ![App running on 3 devices](http://up.kingdomhills.fr/24933353979379759)
 
+# Debuging
+
+As I do not use XCode (I only have a PC), the debuging procedure is a bit tricky.
+Install "socat" (SOcket CAT) and "wget" from Cydia
+Connect via SSH to your device
+Type `wget https://raw.githubusercontent.com/lululombard/CertRemainTime/master/debugsyslog.sh`
+Type `chmod +x debugsyslog.sh`
+Type `./debugsyslog.sh` and then type "watch" when you see "ASL is here to serve you"
+Wait for the syslog to update to the right time
+Launch CertRemainTime, and see what happens.
+If it crashes, make a screenshot and send it to me, I'll fix it ASAP.
+A successful launch will look like this :
+![Debug](http://up.kingdomhills.fr/24933353979379760)
+
+You can remove socat and wget from your device. Don't forget to run `rm debugsyslog.sh` to remove the debug script from your device.
+
 # Contributors
 
 DaniWinter for the mach portal compatibility and the uicache (thanks to razer86 too for the mach portal string)
