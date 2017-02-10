@@ -154,10 +154,18 @@
 		}
 	}
 
+	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
+	NSLog(@"[CertRemainTime] appId = %@", appId);
+	NSLog(@"[CertRemainTime] now = %@", now);
+	NSLog(@"[CertRemainTime] ttlDays = %@", ttlDays);
+	NSLog(@"[CertRemainTime] expireDate = %@", expireDate);
+	NSLog(@"[CertRemainTime] createDate = %@", createDate);
+
 	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
 	[[self view] setBackgroundColor:[UIColor whiteColor]];
 
 	/* Label */
+	NSLog(@"[CertRemainTime] Drawing label 1");
 	label1 = [[UILabel alloc] init];
 	label1.font = [UIFont boldSystemFontOfSize: 45.0f];
 	label1.textColor = [UIColor blackColor];
@@ -169,6 +177,7 @@
 	[label1 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label1];
 
+	NSLog(@"[CertRemainTime] Drawing label 2");
 	label2 = [[UILabel alloc] init];
 	label2.font = [UIFont boldSystemFontOfSize: 15.0f];
 	label2.textColor = [UIColor blackColor];
@@ -180,6 +189,7 @@
 	[label2 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label2];
 
+	NSLog(@"[CertRemainTime] Drawing label 3");
 	label3 = [[UILabel alloc] init];
 	label3.font = [UIFont boldSystemFontOfSize: 20.0f];
 	label3.textColor = [UIColor blackColor];
@@ -199,6 +209,7 @@
 			secondsBetween = [now timeIntervalSinceDate:expireDate];
 			state = @"Expired since";
 		}
+		NSLog(@"[CertRemainTime] State line 212 = %@", state);
 		int minutesBetween = secondsBetween / 60;
 		int days = 0;
 		int hours = 0;
@@ -210,18 +221,30 @@
 			minutesBetween -= 60;
 			hours++;
 		}
+		NSString *daysString = [NSString stringWithFormat:@"%i", days];
+		NSString *hoursString = [NSString stringWithFormat:@"%i", hours];
+		NSString *minutesString = [NSString stringWithFormat:@"%i", minutesBetween];
+		NSLog(@"[CertRemainTime] days = %@", daysString);
+		NSLog(@"[CertRemainTime] hours = %@", hoursString);
+		NSLog(@"[CertRemainTime] minutes = %@", minutesString);
 		if (days == 0 && hours == 0 && minutesBetween == 0) remaining = @"NOW !";
 		else {
-			if (days > 0) remaining = [remaining stringByAppendingString:[[NSString stringWithFormat:@"%i", days] stringByAppendingString:@" days"]];
+			if (days > 0) {
+				NSLog(@"[CertRemainTime] days > 0 = YES");
+				remaining = [remaining stringByAppendingString:[daysString stringByAppendingString:(days == 1 ? @" day" : @" days")]];
+			}
 			if (days < 10 && hours > 0) {
+				NSLog(@"[CertRemainTime] days < 10 && hours > 0 = YES");
 				if (![remaining isEqual:@""]) remaining = [remaining stringByAppendingString:(days == 0 && minutesBetween > 0) ? @", " : @" and "];
-				remaining = [remaining stringByAppendingString:[[NSString stringWithFormat:@"%i", hours] stringByAppendingString:@" hours"]];
+				remaining = [remaining stringByAppendingString:[hoursString stringByAppendingString:(hours == 1 ? @" hour" : @" hours")]];
 			}
 			if (days == 0 && minutesBetween > 0) {
+				NSLog(@"[CertRemainTime] days == 0 && minutesBetween > 0 = YES");
 				if (![remaining isEqual:@""]) remaining = [remaining stringByAppendingString:@" and "];
-				remaining = [remaining stringByAppendingString:[[NSString stringWithFormat:@"%i", minutesBetween] stringByAppendingString:@" minutes"]];
+				remaining = [remaining stringByAppendingString:[minutesString stringByAppendingString:(minutesBetween == 1 ? @" minute" : @" minutes")]];
 			}
 		}
+		NSLog(@"[CertRemainTime] Remaining = %@", remaining);
 		[label3 setText:[[state stringByAppendingString:@" "] stringByAppendingString:remaining]];
 	}
 	
@@ -230,6 +253,7 @@
 	[label3 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label3];
 
+	NSLog(@"[CertRemainTime] Drawing label 4");
 	label4 = [[UILabel alloc] init];
 	label4.font = [UIFont boldSystemFontOfSize: 15.0f];
 	label4.textColor = [UIColor blackColor];
@@ -241,6 +265,7 @@
 	[label4 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label4];
 
+	NSLog(@"[CertRemainTime] Drawing label 5");
 	label5 = [[UILabel alloc] init];
 	label5.font = [UIFont boldSystemFontOfSize: 15.0f];
 	label5.textColor = [UIColor blackColor];
@@ -253,6 +278,7 @@
 	[label5 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label5];
 
+	NSLog(@"[CertRemainTime] Drawing label 6");
 	label6 = [[UILabel alloc] init];
 	label6.font = [UIFont boldSystemFontOfSize: 15.0f];
 	label6.textColor = [UIColor blackColor];
@@ -265,6 +291,7 @@
 	[label6 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label6];
 
+	NSLog(@"[CertRemainTime] Drawing label 7");
 	label7 = [[UILabel alloc] init];
 	label7.font = [UIFont boldSystemFontOfSize: 15.0f];
 	label7.textColor = [UIColor blackColor];
@@ -276,6 +303,7 @@
 	[label7 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label7];
 
+	NSLog(@"[CertRemainTime] Drawing label 8");
 	footer = [[UILabel alloc] init];
 	footer.font = [UIFont boldSystemFontOfSize: 10.0f];
 	footer.textColor = [UIColor blackColor];
@@ -288,6 +316,7 @@
 	[[self view] addSubview:footer];
 
 	/* Spaces */
+	NSLog(@"[CertRemainTime] Defining spaces");
 	topSpace = [[UIView alloc] init];
 	bottomSpace = [[UIView alloc] init];
 	topSpace.translatesAutoresizingMaskIntoConstraints = NO;
@@ -296,8 +325,10 @@
 	[[self view] addSubview:bottomSpace];
 
 	/* Constraints */
+	NSLog(@"[CertRemainTime] Defining Constraints");
 	NSDictionary *viewDict = NSDictionaryOfVariableBindings(label1, label2, label3, label4, label5, label6, label7, footer, topSpace, bottomSpace);
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 1");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label1
 		attribute:NSLayoutAttributeCenterX
@@ -308,6 +339,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 2");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label2
 		attribute:NSLayoutAttributeCenterX
@@ -318,6 +350,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 3");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label3
 		attribute:NSLayoutAttributeCenterX
@@ -328,6 +361,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 4");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label4
 		attribute:NSLayoutAttributeCenterX
@@ -338,6 +372,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 5");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label5
 		attribute:NSLayoutAttributeCenterX
@@ -348,6 +383,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 6");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label6
 		attribute:NSLayoutAttributeCenterX
@@ -358,6 +394,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 7");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label7
 		attribute:NSLayoutAttributeCenterX
@@ -368,6 +405,7 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining constraint for label 8");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:footer
 		attribute:NSLayoutAttributeCenterX
@@ -378,12 +416,14 @@
 		constant:0
 	]];
 
+	NSLog(@"[CertRemainTime] Defining general look");
 	[self.view addConstraints: [NSLayoutConstraint
 		constraintsWithVisualFormat:@"V:|-50-[label1]-10-[label2][topSpace(==bottomSpace)]-[label3]-100-[label4]-[label5]-[label6]-[label7][bottomSpace][footer]-10-|"
 		options:0
 		metrics:nil
 		views:viewDict
 	]];
+	NSLog(@"[CertRemainTime] Done !");
 }
 
 @end
