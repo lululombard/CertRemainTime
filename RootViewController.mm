@@ -142,6 +142,8 @@
 			([appIdName rangeOfString:@"home"].location != NSNotFound && [appIdName rangeOfString:@"depot"].location != NSNotFound))
 		{
 			NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+			NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
+			[dateFormat setLocale:locale];
 			[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
 			NSDate *expireNSDateTemp = [dateFormat dateFromString:expireDateTemp];
 			NSDate *createNSDateTemp = [dateFormat dateFromString:creationDateTemp];
