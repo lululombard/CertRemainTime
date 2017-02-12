@@ -43,7 +43,7 @@ A successful launch will look like this :
 
 ![Debug](http://up.kingdomhills.fr/24933353979379760)
 
-You can remove socat and wget from your device. Don't forget to run `rm debugsyslog.sh` to remove the debug script from your device.
+You can remove socat from your device after this operation.
 
 # Contributors
 
