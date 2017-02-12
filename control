@@ -1,8 +1,9 @@
 Package: fr.lululombard.certremaintime
 Name: CertRemainTime
-Version: 2.0.2
+Version: 2.1.0
 Architecture: iphoneos-arm
 Description: Basic App to know when you'll need to resign your Jailbreak tool
 Maintainer: lululombard <contact@lululombard.fr>
 Author: lululombard <contact@lululombard.fr>
 Section: Utilities
+Pre-Depends: firmware (>= 9.0)

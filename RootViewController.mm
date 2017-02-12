@@ -156,6 +156,10 @@
 		}
 	}
 
+	if (![appId isEqual:@"-1"] && ![appId isEqual:@"-2"] && expireDate <= 0) appId = @"-3";
+
+	appId = @"-3";
+
 	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
 	NSLog(@"[CertRemainTime] appId = %@", appId);
 	NSLog(@"[CertRemainTime] now = %@", now);
@@ -197,8 +201,9 @@
 	label3.textColor = [UIColor blackColor];
 	label3.backgroundColor = [UIColor clearColor];
 	label3.textAlignment = NSTextAlignmentCenter;
-	if ([expireDate isEqual:@"-1"]) [label3 setText:@"State : No cert found (expired ?)"];
-	else if ([expireDate isEqual:@"-2"]) [label3 setText:@"State : No cert compatible (expired ?)"];
+	if ([appId isEqual:@"-1"]) [label3 setText:@"State : No certificate found"];
+	else if ([appId isEqual:@"-2"]) [label3 setText:@"State : No certificate compatible"];
+	else if ([appId isEqual:@"-3"]) [label3 setText:@"State : Location error"];
 	else {
 		NSTimeInterval secondsBetween;
 		NSString *state;
@@ -261,7 +266,9 @@
 	label4.textColor = [UIColor blackColor];
 	label4.backgroundColor = [UIColor clearColor];
 	label4.textAlignment = NSTextAlignmentCenter;
-	if (![expireDate isEqual:@"-1"] && ! [expireDate isEqual:@"-2"]) [label4 setText:[@"Tool detected : " stringByAppendingString:appId]];
+	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label4 setText:@"Possible issues :"];
+	else if ([appId isEqual:@"-3"]) [label4 setText:@"Please send a mail with these info :"];
+	else [label4 setText:[@"Tool detected : " stringByAppendingString:appId]];
 	[label4 sizeToFit];
 	label4.translatesAutoresizingMaskIntoConstraints = NO;
 	[label4 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -274,7 +281,9 @@
 	label5.backgroundColor = [UIColor clearColor];
 	label5.textAlignment = NSTextAlignmentCenter;
 	NSString *expireDateString = [self humanLocalizedDate:expireDate displayFormat:defFormat];
-	if (![expireDate isEqual:@"-1"] && ! [expireDate isEqual:@"-2"]) [label5 setText:[@"Expiration : " stringByAppendingString:expireDateString]];
+	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label5 setText:@"- Your cert is expired and was removed"];
+	else if ([appId isEqual:@"-3"]) [label5 setText:@"- Language and region set"];
+	else [label5 setText:[@"Expiration : " stringByAppendingString:expireDateString]];
 	[label5 sizeToFit];
 	label5.translatesAutoresizingMaskIntoConstraints = NO;
 	[label5 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -287,7 +296,9 @@
 	label6.backgroundColor = [UIColor clearColor];
 	label6.textAlignment = NSTextAlignmentCenter;
 	NSString *createDateString = [self humanLocalizedDate:createDate displayFormat:defFormat];
-	if (![expireDate isEqual:@"-1"] && ! [expireDate isEqual:@"-2"]) [label6 setText:[@"Creation : " stringByAppendingString:createDateString]];
+	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label6 setText:@"- You didn't use Cydia Impactor"];
+	else if ([appId isEqual:@"-3"]) [label6 setText:@"- Hour display setting (12h/24h)"];
+	else [label6 setText:[@"Creation : " stringByAppendingString:createDateString]];
 	[label6 sizeToFit];
 	label6.translatesAutoresizingMaskIntoConstraints = NO;
 	[label6 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -299,7 +310,9 @@
 	label7.textColor = [UIColor blackColor];
 	label7.backgroundColor = [UIColor clearColor];
 	label7.textAlignment = NSTextAlignmentCenter;
-	if (![expireDate isEqual:@"-1"] && ! [expireDate isEqual:@"-2"]) [label7 setText:[@"Certificate duration : " stringByAppendingString:[ttlDays stringByAppendingString:@" days"]]];
+	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label7 setText:@"- Other ? contact@lululombard.fr"];
+	else if ([appId isEqual:@"-3"]) [label7 setText:@"- Calendar used (Gregorian or other)"];
+	else [label7 setText:[@"Certificate duration : " stringByAppendingString:[ttlDays stringByAppendingString:@" days"]]];
 	[label7 sizeToFit];
 	label7.translatesAutoresizingMaskIntoConstraints = NO;
 	[label7 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -311,7 +324,9 @@
 	footer.textColor = [UIColor blackColor];
 	footer.backgroundColor = [UIColor clearColor];
 	footer.textAlignment = NSTextAlignmentCenter;
-	[footer setText:@"Any issues ? contact@lululombard.fr"];
+	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
+	else if ([appId isEqual:@"-3"]) [footer setText:@"contact@lululombard.fr"];
+	else [footer setText:@"Any issues ? contact@lululombard.fr"];
 	[footer sizeToFit];
 	footer.translatesAutoresizingMaskIntoConstraints = NO;
 	[footer setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
