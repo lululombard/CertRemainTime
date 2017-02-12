@@ -59,6 +59,8 @@ HunterStanton (he added the licence that forgot at 2 AM)
 
 windexi and Animus120 for their certs (buggy if one of them didn't have the ExpirationDate key)
 
+Slouther for his crash report that helped me to find the AM/PM bug
+
 # More info
 
 This package is also licensed under WTFPL.
