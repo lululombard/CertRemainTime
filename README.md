@@ -27,15 +27,11 @@ Notifications 24h, 12h, 6h and 1h before expiration
 
 As I do not use XCode (I only have a PC), the debuging procedure is a bit tricky.
 
-Install "socat" (SOcket CAT) and "wget" from Cydia
+Install "socat" (SOcket CAT) from Cydia.
 
 Connect via SSH to your device
 
-Type `wget https://raw.githubusercontent.com/lululombard/CertRemainTime/master/debugsyslog.sh`
-
-Type `chmod +x debugsyslog.sh`
-
-Type `./debugsyslog.sh` and then type "watch" when you see "ASL is here to serve you"
+Type `socat - UNIX-CONNECT:/var/run/lockdown/syslog.sock` then type "watch" when you see "ASL is here to serve you"
 
 Wait for the syslog to update to the right time
 
@@ -47,7 +43,7 @@ A successful launch will look like this :
 
 ![Debug](http://up.kingdomhills.fr/24933353979379760)
 
-You can remove socat and wget from your device. Don't forget to run `rm debugsyslog.sh` to remove the debug script from your device.
+You can remove socat from your device after this operation.
 
 # Contributors
 
