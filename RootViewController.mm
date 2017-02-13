@@ -158,8 +158,6 @@
 
 	if (![appId isEqual:@"-1"] && ![appId isEqual:@"-2"] && expireDate <= 0) appId = @"-3";
 
-	appId = @"-3";
-
 	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
 	NSLog(@"[CertRemainTime] appId = %@", appId);
 	NSLog(@"[CertRemainTime] now = %@", now);
