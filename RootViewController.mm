@@ -1,4 +1,6 @@
 #import "RootViewController.h"
+#import "SignedCert.h"
+#import "CertUtils.h"
 
 @implementation RootViewController {
 	UIWindow *window;
@@ -32,13 +34,11 @@
 }
 
 - (void)loadView {
-	NSFileManager *filemgr;
-	NSString *defFormat = @"yyyy-MM-dd 'at' HH:mm";
-	NSString *appId = @"-1";
-	NSDate *now = [NSDate date];
-	NSString *ttlDays;
-	NSDate *expireDate;
-	NSDate *createDate;
+    NSFileManager *filemgr;
+    SignedCert *usingCert;
+    NSDate *now = [NSDate date];
+    NSString *defFormat = @"yyyy-MM-dd 'at' HH:mm";
+
 	//UIProgressView *progressView;
 
 	filemgr = [[NSFileManager alloc] init];
@@ -49,121 +49,33 @@
 	NSLog(@"[CertRemainTime] Now browsing %@", [filemgr currentDirectoryPath]);
 
 	for (NSString *fullFileName in dirContents) {
-		if ([appId isEqual:@"-1"]) appId = @"-2";
-		NSLog(@"[CertRemainTime] Reading plist file %@", fullFileName);
-		NSError *err;
-		NSString *stringContent = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:&err];
-		if (err > 0) {
-			NSLog(@"[CertRemainTime] Err %@", err);
-			continue;
-		}
-		if ([stringContent rangeOfString:@"<plist version=\"1.0\">"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the start of the plist file");
-			continue;
-		}
-		if ([stringContent rangeOfString:@"</plist>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the end of the plist file");
-			continue;
-		}
-		stringContent = [stringContent componentsSeparatedByString:@"<plist version=\"1.0\">"][1];
-		stringContent = [stringContent componentsSeparatedByString:@"</plist>"][0];
-		if ([stringContent rangeOfString:@"<key>AppIDName</key>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the AppIDName key");
-			continue;
-		}
-		if ([stringContent rangeOfString:@"<string>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the AppIDName string begining");
-			continue;
-		}
-		if ([stringContent rangeOfString:@"</string>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the AppIDName string end");
-			continue;
-		}
-		NSString *appIdName = [stringContent componentsSeparatedByString:@"<key>AppIDName</key>"][1];
-		appIdName = [appIdName componentsSeparatedByString:@"<string>"][1];
-		appIdName = [appIdName componentsSeparatedByString:@"</string>"][0];
-		if ([appIdName rangeOfString:@"CY- "].location != NSNotFound) appIdName = [appIdName componentsSeparatedByString:@"CY- "][1];
-		appIdName = [appIdName lowercaseString];
-		NSLog(@"[CertRemainTime] AppIDName = %@", appIdName);
-		if ([stringContent rangeOfString:@"<key>ExpirationDate</key>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate key");
-			continue;
-		}
-		NSString *expireDateTemp = [stringContent componentsSeparatedByString:@"<key>ExpirationDate</key>\n"][1];
-		if ([expireDateTemp rangeOfString:@"<date>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate date begining");
-			continue;
-		}
-		if ([expireDateTemp rangeOfString:@"</date>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the ExpirationDate date end");
-			continue;
-		}
-		expireDateTemp = [expireDateTemp componentsSeparatedByString:@"<date>"][1];
-		expireDateTemp = [expireDateTemp componentsSeparatedByString:@"</date>"][0];
-		NSLog(@"[CertRemainTime] ExpirationDate = %@", expireDateTemp);
+        SignedCert *cert = [[SignedCert alloc] init:[CertUtils provisioningProfileAtPath:fullFileName]];
+		if ([cert.appId isEqual:@"-1"]) cert.appId = @"-2";
 
-		if ([stringContent rangeOfString:@"<key>CreationDate</key>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the CreationDate key");
-			continue;
-		}
-		NSString *creationDateTemp = [stringContent componentsSeparatedByString:@"<key>CreationDate</key>\n"][1];
-		if ([creationDateTemp rangeOfString:@"<date>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the CreationDate date begining");
-			continue;
-		}
-		if ([creationDateTemp rangeOfString:@"</date>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the CreationDate date end");
-			continue;
-		}
-		creationDateTemp = [creationDateTemp componentsSeparatedByString:@"<date>"][1];
-		creationDateTemp = [creationDateTemp componentsSeparatedByString:@"</date>"][0];
-		NSLog(@"[CertRemainTime] CreationDate = %@", creationDateTemp);
-
-		if ([stringContent rangeOfString:@"<key>TimeToLive</key>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the TimeToLive key");
-			continue;
-		}
-		NSString *ttlTemp = [stringContent componentsSeparatedByString:@"<key>TimeToLive</key>\n"][1];
-		if ([ttlTemp rangeOfString:@"<integer>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the TimeToLive integer begining");
-			continue;
-		}
-		if ([ttlTemp rangeOfString:@"</integer>"].location == NSNotFound) {
-			NSLog(@"[CertRemainTime] Cannot find the TimeToLive integer end");
-			continue;
-		}
-		ttlTemp = [ttlTemp componentsSeparatedByString:@"<integer>"][1];
-		ttlTemp = [ttlTemp componentsSeparatedByString:@"</integer>"][0];
-		NSLog(@"[CertRemainTime] TimeToLive = %@", ttlTemp);
-
-
-		if ([appIdName rangeOfString:@"yalu"].location != NSNotFound ||  
-			([appIdName rangeOfString:@"mach"].location != NSNotFound && [appIdName rangeOfString:@"portal"].location != NSNotFound) || 
-			([appIdName rangeOfString:@"home"].location != NSNotFound && [appIdName rangeOfString:@"depot"].location != NSNotFound))
+		if ([cert.appId rangeOfString:@"yalu"].location != NSNotFound ||  
+			([cert.appId rangeOfString:@"mach"].location != NSNotFound && [cert.appId rangeOfString:@"portal"].location != NSNotFound) || 
+			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound))
 		{
-			NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-			NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"];
-			[dateFormat setLocale:locale];
-			[dateFormat setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
-			NSDate *expireNSDateTemp = [dateFormat dateFromString:expireDateTemp];
-			NSDate *createNSDateTemp = [dateFormat dateFromString:creationDateTemp];
-			if (expireDate <= 0 || [expireNSDateTemp compare:expireDate] == NSOrderedDescending) {
-				appId = appIdName;
-				ttlDays = ttlTemp;
-				expireDate = expireNSDateTemp;
-				createDate = createNSDateTemp;
+			if (!usingCert) {
+                usingCert = cert;
 			}
+            
+            if (usingCert) {
+                if ([usingCert.expireDate compare:cert.expireDate] == NSOrderedDescending) {
+                    usingCert = cert;
+                }
+            }
 		}
 	}
 
-	if (![appId isEqual:@"-1"] && ![appId isEqual:@"-2"] && expireDate <= 0) appId = @"-3";
+	if (![usingCert.appId isEqual:@"-1"] && ![usingCert.appId isEqual:@"-2"] && usingCert.expireDate <= 0) usingCert.appId = @"-3";
 
 	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
-	NSLog(@"[CertRemainTime] appId = %@", appId);
+	NSLog(@"[CertRemainTime] appId = %@", usingCert.appId);
 	NSLog(@"[CertRemainTime] now = %@", now);
-	NSLog(@"[CertRemainTime] ttlDays = %@", ttlDays);
-	NSLog(@"[CertRemainTime] expireDate = %@", expireDate);
-	NSLog(@"[CertRemainTime] createDate = %@", createDate);
+	NSLog(@"[CertRemainTime] ttlDays = %@", usingCert.ttlDays);
+	NSLog(@"[CertRemainTime] expireDate = %@", usingCert.expireDate);
+	NSLog(@"[CertRemainTime] createDate = %@", usingCert.createDate);
 
 	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
 	[[self view] setBackgroundColor:[UIColor whiteColor]];
@@ -199,19 +111,19 @@
 	label3.textColor = [UIColor blackColor];
 	label3.backgroundColor = [UIColor clearColor];
 	label3.textAlignment = NSTextAlignmentCenter;
-	if ([appId isEqual:@"-1"]) [label3 setText:@"State : No certificate found"];
-	else if ([appId isEqual:@"-2"]) [label3 setText:@"State : No certificate compatible"];
-	else if ([appId isEqual:@"-3"]) [label3 setText:@"State : Location error"];
+	if ([usingCert.appId isEqual:@"-1"]) [label3 setText:@"State : No certificate found"];
+	else if ([usingCert.appId isEqual:@"-2"]) [label3 setText:@"State : No certificate compatible"];
+	else if ([usingCert.appId isEqual:@"-3"]) [label3 setText:@"State : Location error"];
 	else {
 		NSTimeInterval secondsBetween;
 		NSString *state;
 		NSString *remaining = @"";
-		if ([expireDate compare:now] == NSOrderedDescending) {
-			secondsBetween = [expireDate timeIntervalSinceDate:now];
+		if ([usingCert.expireDate compare:now] == NSOrderedDescending) {
+			secondsBetween = [usingCert.expireDate timeIntervalSinceDate:now];
 			state = @"Valid for";
 		}
 		else {
-			secondsBetween = [now timeIntervalSinceDate:expireDate];
+			secondsBetween = [now timeIntervalSinceDate:usingCert.expireDate];
 			state = @"Expired since";
 		}
 		NSLog(@"[CertRemainTime] State line 212 = %@", state);
@@ -264,9 +176,9 @@
 	label4.textColor = [UIColor blackColor];
 	label4.backgroundColor = [UIColor clearColor];
 	label4.textAlignment = NSTextAlignmentCenter;
-	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label4 setText:@"Possible issues :"];
-	else if ([appId isEqual:@"-3"]) [label4 setText:@"Please send a mail with these info :"];
-	else [label4 setText:[@"Tool detected : " stringByAppendingString:appId]];
+	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label4 setText:@"Possible issues :"];
+	else if ([usingCert.appId isEqual:@"-3"]) [label4 setText:@"Please send a mail with these info :"];
+	else [label4 setText:[@"Tool detected : " stringByAppendingString:usingCert.appId]];
 	[label4 sizeToFit];
 	label4.translatesAutoresizingMaskIntoConstraints = NO;
 	[label4 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -278,9 +190,9 @@
 	label5.textColor = [UIColor blackColor];
 	label5.backgroundColor = [UIColor clearColor];
 	label5.textAlignment = NSTextAlignmentCenter;
-	NSString *expireDateString = [self humanLocalizedDate:expireDate displayFormat:defFormat];
-	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label5 setText:@"- Your cert is expired and was removed"];
-	else if ([appId isEqual:@"-3"]) [label5 setText:@"- Language and region set"];
+	NSString *expireDateString = [self humanLocalizedDate:usingCert.expireDate displayFormat:defFormat];
+	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label5 setText:@"- Your cert is expired and was removed"];
+	else if ([usingCert.appId isEqual:@"-3"]) [label5 setText:@"- Language and region set"];
 	else [label5 setText:[@"Expiration : " stringByAppendingString:expireDateString]];
 	[label5 sizeToFit];
 	label5.translatesAutoresizingMaskIntoConstraints = NO;
@@ -293,9 +205,9 @@
 	label6.textColor = [UIColor blackColor];
 	label6.backgroundColor = [UIColor clearColor];
 	label6.textAlignment = NSTextAlignmentCenter;
-	NSString *createDateString = [self humanLocalizedDate:createDate displayFormat:defFormat];
-	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label6 setText:@"- You didn't use Cydia Impactor"];
-	else if ([appId isEqual:@"-3"]) [label6 setText:@"- Hour display setting (12h/24h)"];
+	NSString *createDateString = [self humanLocalizedDate:usingCert.createDate displayFormat:defFormat];
+	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label6 setText:@"- You didn't use Cydia Impactor"];
+	else if ([usingCert.appId isEqual:@"-3"]) [label6 setText:@"- Hour display setting (12h/24h)"];
 	else [label6 setText:[@"Creation : " stringByAppendingString:createDateString]];
 	[label6 sizeToFit];
 	label6.translatesAutoresizingMaskIntoConstraints = NO;
@@ -308,9 +220,9 @@
 	label7.textColor = [UIColor blackColor];
 	label7.backgroundColor = [UIColor clearColor];
 	label7.textAlignment = NSTextAlignmentCenter;
-	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [label7 setText:@"- Other ? contact@lululombard.fr"];
-	else if ([appId isEqual:@"-3"]) [label7 setText:@"- Calendar used (Gregorian or other)"];
-	else [label7 setText:[@"Certificate duration : " stringByAppendingString:[ttlDays stringByAppendingString:@" days"]]];
+	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label7 setText:@"- Other ? contact@lululombard.fr"];
+	else if ([usingCert.appId isEqual:@"-3"]) [label7 setText:@"- Calendar used (Gregorian or other)"];
+	else [label7 setText:[@"Certificate duration : " stringByAppendingString:[usingCert.ttlDays stringByAppendingString:@" days"]]];
 	[label7 sizeToFit];
 	label7.translatesAutoresizingMaskIntoConstraints = NO;
 	[label7 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -322,8 +234,8 @@
 	footer.textColor = [UIColor blackColor];
 	footer.backgroundColor = [UIColor clearColor];
 	footer.textAlignment = NSTextAlignmentCenter;
-	if ([appId isEqual:@"-1"] || [appId isEqual:@"-2"]) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
-	else if ([appId isEqual:@"-3"]) [footer setText:@"contact@lululombard.fr"];
+	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
+	else if ([usingCert.appId isEqual:@"-3"]) [footer setText:@"contact@lululombard.fr"];
 	else [footer setText:@"Any issues ? contact@lululombard.fr"];
 	[footer sizeToFit];
 	footer.translatesAutoresizingMaskIntoConstraints = NO;
@@ -387,7 +299,7 @@
 		constant:0
 	]];
 
-	NSLog(@"[CertRemainTime] Defining constraint for label 5");
+	NSLog(@"[CertRemainTime] Defining constraint for label 5'");
 	[self.view addConstraint: [NSLayoutConstraint 
 		constraintWithItem:label5
 		attribute:NSLayoutAttributeCenterX
