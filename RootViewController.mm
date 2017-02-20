@@ -26,20 +26,19 @@
 - (NSString *)humanLocalizedDate:(NSDate *)date displayFormat:(NSString *)format {
 	NSString *toReturn;
 	NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-	NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
-	date = [date dateByAddingTimeInterval:timeZoneSeconds];
 	[dateFormat setDateFormat:format];
 	toReturn = [dateFormat stringFromDate:date];
 	return toReturn;
 }
 
 - (void)loadView {
-    NSFileManager *filemgr;
-    SignedCert *usingCert;
-    NSDate *now = [NSDate date];
-    NSString *defFormat = @"yyyy-MM-dd 'at' HH:mm";
+	int errCode = 1;
+	NSFileManager *filemgr;
+	SignedCert *usingCert;
+	NSDate *now = [NSDate date];
+	NSString *defFormat = @"yyyy-MM-dd 'at' HH:mm";
 
-	//UIProgressView *progressView;
+	//
 
 	filemgr = [[NSFileManager alloc] init];
 	[filemgr changeCurrentDirectoryPath:@"/var/MobileDevice/ProvisioningProfiles/"];
@@ -49,27 +48,30 @@
 	NSLog(@"[CertRemainTime] Now browsing %@", [filemgr currentDirectoryPath]);
 
 	for (NSString *fullFileName in dirContents) {
-        SignedCert *cert = [[SignedCert alloc] init:[CertUtils provisioningProfileAtPath:fullFileName]];
-		if ([cert.appId isEqual:@"-1"]) cert.appId = @"-2";
+		if (errCode == 1) errCode = 2;
+		SignedCert *cert = [[SignedCert alloc] init:[CertUtils provisioningProfileAtPath:fullFileName]];
 
 		if ([cert.appId rangeOfString:@"yalu"].location != NSNotFound ||  
 			([cert.appId rangeOfString:@"mach"].location != NSNotFound && [cert.appId rangeOfString:@"portal"].location != NSNotFound) || 
 			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound))
 		{
 			if (!usingCert) {
-                usingCert = cert;
+				usingCert = cert;
 			}
-            
-            if (usingCert) {
-                if ([usingCert.expireDate compare:cert.expireDate] == NSOrderedDescending) {
-                    usingCert = cert;
-                }
-            }
+			
+			if (usingCert) {
+				if ([usingCert.expireDate compare:cert.expireDate] == NSOrderedDescending) {
+					usingCert = cert;
+				}
+			}
 		}
 	}
 
-	if (![usingCert.appId isEqual:@"-1"] && ![usingCert.appId isEqual:@"-2"] && usingCert.expireDate <= 0) usingCert.appId = @"-3";
+	if (usingCert > 0) errCode = 0;
 
+	if (errCode < 0 && usingCert.expireDate <= 0) errCode = 3;
+
+	NSLog(@"[CertRemainTime] errCode = %@", [NSString stringWithFormat:@"%i", errCode]);
 	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
 	NSLog(@"[CertRemainTime] appId = %@", usingCert.appId);
 	NSLog(@"[CertRemainTime] now = %@", now);
@@ -111,9 +113,9 @@
 	label3.textColor = [UIColor blackColor];
 	label3.backgroundColor = [UIColor clearColor];
 	label3.textAlignment = NSTextAlignmentCenter;
-	if ([usingCert.appId isEqual:@"-1"]) [label3 setText:@"State : No certificate found"];
-	else if ([usingCert.appId isEqual:@"-2"]) [label3 setText:@"State : No certificate compatible"];
-	else if ([usingCert.appId isEqual:@"-3"]) [label3 setText:@"State : Location error"];
+	if (errCode == 1) [label3 setText:@"State : No certificate found"];
+	else if (errCode == 2) [label3 setText:@"State : No certificate compatible"];
+	else if (errCode == 3) [label3 setText:@"State : Location error"];
 	else {
 		NSTimeInterval secondsBetween;
 		NSString *state;
@@ -126,7 +128,7 @@
 			secondsBetween = [now timeIntervalSinceDate:usingCert.expireDate];
 			state = @"Expired since";
 		}
-		NSLog(@"[CertRemainTime] State line 212 = %@", state);
+		NSLog(@"[CertRemainTime] State = %@", state);
 		int minutesBetween = secondsBetween / 60;
 		int days = 0;
 		int hours = 0;
@@ -176,8 +178,8 @@
 	label4.textColor = [UIColor blackColor];
 	label4.backgroundColor = [UIColor clearColor];
 	label4.textAlignment = NSTextAlignmentCenter;
-	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label4 setText:@"Possible issues :"];
-	else if ([usingCert.appId isEqual:@"-3"]) [label4 setText:@"Please send a mail with these info :"];
+	if (errCode == 1 || errCode == 2) [label4 setText:@"Possible issues :"];
+	else if (errCode == 3) [label4 setText:@"Please send a mail with these info :"];
 	else [label4 setText:[@"Tool detected : " stringByAppendingString:usingCert.appId]];
 	[label4 sizeToFit];
 	label4.translatesAutoresizingMaskIntoConstraints = NO;
@@ -191,8 +193,8 @@
 	label5.backgroundColor = [UIColor clearColor];
 	label5.textAlignment = NSTextAlignmentCenter;
 	NSString *expireDateString = [self humanLocalizedDate:usingCert.expireDate displayFormat:defFormat];
-	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label5 setText:@"- Your cert is expired and was removed"];
-	else if ([usingCert.appId isEqual:@"-3"]) [label5 setText:@"- Language and region set"];
+	if (errCode == 1 || errCode == 2) [label5 setText:@"- Your cert is expired and was removed"];
+	else if (errCode == 3) [label5 setText:@"- Language and region set"];
 	else [label5 setText:[@"Expiration : " stringByAppendingString:expireDateString]];
 	[label5 sizeToFit];
 	label5.translatesAutoresizingMaskIntoConstraints = NO;
@@ -206,8 +208,8 @@
 	label6.backgroundColor = [UIColor clearColor];
 	label6.textAlignment = NSTextAlignmentCenter;
 	NSString *createDateString = [self humanLocalizedDate:usingCert.createDate displayFormat:defFormat];
-	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label6 setText:@"- You didn't use Cydia Impactor"];
-	else if ([usingCert.appId isEqual:@"-3"]) [label6 setText:@"- Hour display setting (12h/24h)"];
+	if (errCode == 1 || errCode == 2) [label6 setText:@"- You didn't use Cydia Impactor"];
+	else if (errCode == 3) [label6 setText:@"- Hour display setting (12h/24h)"];
 	else [label6 setText:[@"Creation : " stringByAppendingString:createDateString]];
 	[label6 sizeToFit];
 	label6.translatesAutoresizingMaskIntoConstraints = NO;
@@ -220,8 +222,8 @@
 	label7.textColor = [UIColor blackColor];
 	label7.backgroundColor = [UIColor clearColor];
 	label7.textAlignment = NSTextAlignmentCenter;
-	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [label7 setText:@"- Other ? contact@lululombard.fr"];
-	else if ([usingCert.appId isEqual:@"-3"]) [label7 setText:@"- Calendar used (Gregorian or other)"];
+	if (errCode == 1 || errCode == 2) [label7 setText:@"- Other ? contact@lululombard.fr"];
+	else if (errCode == 3) [label7 setText:@"- Calendar used (Gregorian or other)"];
 	else [label7 setText:[@"Certificate duration : " stringByAppendingString:[usingCert.ttlDays stringByAppendingString:@" days"]]];
 	[label7 sizeToFit];
 	label7.translatesAutoresizingMaskIntoConstraints = NO;
@@ -234,8 +236,8 @@
 	footer.textColor = [UIColor blackColor];
 	footer.backgroundColor = [UIColor clearColor];
 	footer.textAlignment = NSTextAlignmentCenter;
-	if ([usingCert.appId isEqual:@"-1"] || [usingCert.appId isEqual:@"-2"]) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
-	else if ([usingCert.appId isEqual:@"-3"]) [footer setText:@"contact@lululombard.fr"];
+	if (errCode == 1 || errCode == 2) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
+	else if (errCode == 3) [footer setText:@"contact@lululombard.fr"];
 	else [footer setText:@"Any issues ? contact@lululombard.fr"];
 	[footer sizeToFit];
 	footer.translatesAutoresizingMaskIntoConstraints = NO;

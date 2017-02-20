@@ -47,6 +47,8 @@ You can remove socat from your device after this operation.
 
 # Contributors
 
+*Zygimantass for a -practically- full rewrite of the code*
+
 DaniWinter for the mach portal compatibility and the uicache (thanks to razer86 too for the mach portal string)
 
 Fields for the Home Depot cert that allowed me to add the compatibility with this tool.
