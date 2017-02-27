@@ -51,18 +51,13 @@
 		if (errCode == 1) errCode = 2;
 		SignedCert *cert = [[SignedCert alloc] init:[CertUtils provisioningProfileAtPath:fullFileName]];
 
-		if ([cert.appId rangeOfString:@"yalu"].location != NSNotFound ||  
+		if ([cert.appId rangeOfString:@"jailbreak"].location != NSNotFound ||  
+			[cert.appId rangeOfString:@"yalu"].location != NSNotFound ||  
 			([cert.appId rangeOfString:@"mach"].location != NSNotFound && [cert.appId rangeOfString:@"portal"].location != NSNotFound) || 
 			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound))
 		{
-			if (!usingCert) {
+			if (!usingCert || [cert.expireDate compare:usingCert.expireDate] == NSOrderedDescending) {
 				usingCert = cert;
-			}
-			
-			if (usingCert) {
-				if ([usingCert.expireDate compare:cert.expireDate] == NSOrderedDescending) {
-					usingCert = cert;
-				}
 			}
 		}
 	}
