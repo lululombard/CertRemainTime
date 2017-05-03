@@ -51,8 +51,9 @@
 		if (errCode == 1) errCode = 2;
 		SignedCert *cert = [[SignedCert alloc] init:[CertUtils provisioningProfileAtPath:fullFileName]];
 
-		if ([cert.appId rangeOfString:@"jailbreak"].location != NSNotFound ||  
-			[cert.appId rangeOfString:@"yalu"].location != NSNotFound ||  
+		if ([cert.appId rangeOfString:@"jailbreak"].location != NSNotFound || 
+			[cert.appId rangeOfString:@"yalu"].location != NSNotFound || 
+			[cert.appId rangeOfString:@"pangu"].location != NSNotFound || 
 			([cert.appId rangeOfString:@"mach"].location != NSNotFound && [cert.appId rangeOfString:@"portal"].location != NSNotFound) || 
 			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound))
 		{
