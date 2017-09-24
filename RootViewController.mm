@@ -55,7 +55,8 @@
 			[cert.appId rangeOfString:@"yalu"].location != NSNotFound || 
 			[cert.appId rangeOfString:@"pangu"].location != NSNotFound || 
 			([cert.appId rangeOfString:@"mach"].location != NSNotFound && [cert.appId rangeOfString:@"portal"].location != NSNotFound) || 
-			([cert.appId rangeOfString:@"extra"].location != NSNotFound && [cert.appId rangeOfString:@"recipe"].location != NSNotFound) ||
+			([cert.appId rangeOfString:@"extra"].location != NSNotFound && [cert.appId rangeOfString:@"recipe"].location != NSNotFound) || 
+			([cert.appId rangeOfString:@"ph"].location != NSNotFound && [cert.appId rangeOfString:@"nix"].location != NSNotFound) || 
 			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound))
 		{
 			if (!usingCert || [cert.expireDate compare:usingCert.expireDate] == NSOrderedDescending) {
