@@ -62,7 +62,7 @@ windexi and Animus120 for their certs (buggy if one of them didn't have the Expi
 
 Slouther for his crash report that helped me to find the AM/PM bug
 
-FaZeIlLuMiNaTi for adding support for adding support for H3lix, Electra and LiberiOS
+FaZeIlLuMiNaTi for adding support for H3lix, Electra and LiberiOS
 
 # More info
 
