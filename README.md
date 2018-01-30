@@ -2,7 +2,7 @@
 
 ![Logo](https://raw.githubusercontent.com/lululombard/CertRemainTime/master/Resources/Icon%402x.png)
 
-This tool tells you when your yalu102/mach portal/Home Depot will expire.
+This tool tells you when your yalu102/pangu/mach portal/Home Depot/phoenix/g0blin/H3lix/Electra/LiberiOS will expire.
 
 It only works if you installed it with Cydia Impactor.
 
@@ -22,6 +22,7 @@ Notifications 24h, 12h, 6h and 1h before expiration
 # Screenshots
 
 ![App running on 3 devices](http://up.kingdomhills.fr/24933353979379759)
+![App running on Electra jailbreak](https://i.imgur.com/Xk4NbDn.png)
 
 # Debuging
 
@@ -61,11 +62,13 @@ windexi and Animus120 for their certs (buggy if one of them didn't have the Expi
 
 Slouther for his crash report that helped me to find the AM/PM bug
 
+FaZeIlLuMiNaTi for adding support for adding support for H3lix, Electra and LiberiOS
+
 # More info
 
 This package is also licensed under WTFPL.
 
-Compiled with LLVM+Clang on an iPhone 5s running iOS 10.2.
+Compiled with theos on macOS against the iOS 9.2 SDK.
 
 The icon is not really mine but it was licenced under WTFPL so no big deal.
 
