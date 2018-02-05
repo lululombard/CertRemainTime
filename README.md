@@ -10,8 +10,7 @@ It only works if you installed it with Cydia Impactor.
 
 This package is available from the default source BigBoss.
 
-Early updates are available from my repo at [http://apt.lululombard.fr](http://apt.lululombard.fr/) but you can also download the .deb from this 
-GitHub repo.
+apt.lululombard.fr is now down, fuck PulseHeberg for letting their VPS' host corrupt its FS without a backup.
 
 # What's next
 
