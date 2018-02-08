@@ -58,6 +58,7 @@
 			([cert.appId rangeOfString:@"extra"].location != NSNotFound && [cert.appId rangeOfString:@"recipe"].location != NSNotFound) ||
 			([cert.appId rangeOfString:@"ph"].location != NSNotFound && [cert.appId rangeOfString:@"nix"].location != NSNotFound) ||
 			([cert.appId rangeOfString:@"home"].location != NSNotFound && [cert.appId rangeOfString:@"depot"].location != NSNotFound) ||
+			[cert.appId rangeOfString:@"saigon"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"g0blin"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"h3lix"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"electra"].location != NSNotFound ||

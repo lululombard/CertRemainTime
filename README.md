@@ -10,7 +10,8 @@ It only works if you installed it with Cydia Impactor.
 
 This package is available from the default source BigBoss.
 
-apt.lululombard.fr is now down, fuck PulseHeberg for letting their VPS' host corrupt its FS without a backup.
+### iOS 11
+For iOS 11/Electra, follow the instructions [here](https://github.com/lululombard/CertRemainTime/issues/13#issuecomment-363064151).
 
 # What's next
 
@@ -61,7 +62,7 @@ windexi and Animus120 for their certs (buggy if one of them didn't have the Expi
 
 Slouther for his crash report that helped me to find the AM/PM bug
 
-FaZeIlLuMiNaTi for adding support for H3lix, Electra and LiberiOS
+FaZeIlLuMiNaTi for adding support for Saigon, H3lix, Electra and LiberiOS
 
 # More info
 
