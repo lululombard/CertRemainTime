@@ -5,6 +5,7 @@ ARCH = arm64-apple-ios7.0
 APPLICATION_NAME = CertRemainTime
 CertRemainTime_FILES = main.m certremaintimeApplication.mm RootViewController.mm SignedCert.m CertUtils.m
 CertRemainTime_FRAMEWORKS = UIKit CoreGraphics
+CertRemainTime_CODESIGN_FLAGS=-Sentitlements.xml
 
 ADDITIONAL_OBJCFLAGS = -fobjc-arc
 
