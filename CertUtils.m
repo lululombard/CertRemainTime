@@ -11,12 +11,12 @@
 	
 	NSData *stringData = [stringContent dataUsingEncoding:NSASCIIStringEncoding];
 	
-	NSString *error;
+	NSError *error;
 	NSPropertyListFormat format;
 	
 	id plist;
 	
-	plist = [NSPropertyListSerialization propertyListFromData:stringData  mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
+	plist = [NSPropertyListSerialization propertyListWithData:stringData options:/*unused*/0 format:&format error:&error];
 	if (!plist)NSLog(@"%@", error);
 	
 	return plist;

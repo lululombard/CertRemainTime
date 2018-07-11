@@ -82,7 +82,7 @@
 	NSLog(@"[CertRemainTime] expireDate = %@", usingCert.expireDate);
 	NSLog(@"[CertRemainTime] createDate = %@", usingCert.createDate);
 
-	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+	self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	[[self view] setBackgroundColor:[UIColor whiteColor]];
 
 	/* Label */
