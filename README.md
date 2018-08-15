@@ -2,13 +2,13 @@
 
 ![Logo](https://raw.githubusercontent.com/lululombard/CertRemainTime/master/Resources/Icon%402x.png)
 
-This tool tells you when your yalu102/pangu/mach portal/Home Depot/phoenix/g0blin/H3lix/Electra/LiberiOS will expire.
+This tool tells you when your on device jailbreak tool will expire.
 
-It only works if you installed it with Cydia Impactor.
+This tool is compatible with both Xcode and Cydia Impactor signed apps.
 
 # Installation
 
-This package is available from the default source BigBoss.
+[This package is available from the default source BigBoss.](http://moreinfo.thebigboss.org/moreinfo/depiction.php?file=certtimeremainingDp)
 
 # What's next
 
@@ -59,7 +59,7 @@ windexi and Animus120 for their certs (buggy if one of them didn't have the Expi
 
 Slouther for his crash report that helped me to find the AM/PM bug
 
-FaZeIlLuMiNaTi for adding support for Saigon, g0blin, H3lix, Electra and LiberiOS
+FaZeIlLuMiNaTi for adding support for Saigon, g0blin, H3lix, Electra, LiberiOS and Meridian
 
 # More info
 

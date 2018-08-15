@@ -38,8 +38,6 @@
 	NSDate *now = [NSDate date];
 	NSString *defFormat = @"yyyy-MM-dd 'at' HH:mm";
 
-	//
-
 	filemgr = [[NSFileManager alloc] init];
 	[filemgr changeCurrentDirectoryPath:@"/var/MobileDevice/ProvisioningProfiles/"];
 
@@ -62,7 +60,8 @@
 			[cert.appId rangeOfString:@"g0blin"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"h3lix"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"electra"].location != NSNotFound ||
-			[cert.appId rangeOfString:@"liberios"].location != NSNotFound)
+			[cert.appId rangeOfString:@"liberios"].location != NSNotFound ||
+			[cert.appId rangeOfString:@"meridian"].location != NSNotFound)
 		{
 			if (!usingCert || [cert.expireDate compare:usingCert.expireDate] == NSOrderedDescending) {
 				usingCert = cert;
