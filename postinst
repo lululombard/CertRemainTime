@@ -1,8 +1,8 @@
 #!/bin/bash
-echo "Rebuilding UICache, may take up to 30 secs"
+echo "Rebuilding uicache, may take up to 30 secs"
 if [ "$(id -u)" != "0" ]; then
 	uicache
 else
 	su mobile -c uicache
 fi
-echo "UICache ok !"
+echo "Finished rebuilding uicache!"
