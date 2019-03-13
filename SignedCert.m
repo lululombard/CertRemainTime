@@ -7,7 +7,7 @@
 	if (self) {
 		_appId = plist[@"AppIDName"];
 		NSLog(@"[CertRemainTime] 1:_appId = %@", _appId);
-		if ([_appId rangeOfString:@"CY- "].location != NSNotFound) { // Cydia impactor
+		if ([_appId rangeOfString:@"CY- "].location != NSNotFound) { // Cydia impactor/Ext3nder/ReProvision
 			_appId = [_appId componentsSeparatedByString:@"CY- "][1];
 			NSLog(@"[CertRemainTime] CY:_appId = %@", _appId);
 		}
@@ -15,17 +15,9 @@
 			_appId = [_appId componentsSeparatedByString:@"XC- "][1]; // Xcode
 			NSLog(@"[CertRemainTime] XC:_appId = %@", _appId);
 		}
-		if ([_appId rangeOfString:@"dingshengapp"].location != NSNotFound) { 
-			_appId = @"Electra"; // Tweakbox Electra - 15/8/2018
-			NSLog(@"[CertRemainTime] dingshengapp:_appId = %@", _appId);
-			// If anyone can think of a better method than this, submit a PR with the relevant changes.
-			// This method requires updating of Cert Time everytime a new enterprise account is used.
-			// Perhaps I'll think of something better in the meantime.
-			// - FaZe IlLuMiNaTi
-		}
-		if ([_appId rangeOfString:@"lscomcarry"].location != NSNotFound) { 
-			_appId = @"Electra"; // TweakBox Electra - 27/8/2018
-			NSLog(@"[CertRemainTime] lscomcarry:_appId = %@", _appId);
+		if ([_appId rangeOfString:@"KYESoundsAPP"].location != NSNotFound) { 
+			_appId = @"tweakbox"; // TweakBox - 13/3/2019
+			NSLog(@"[CertRemainTime] KYESoundsAPP:_appId = %@", _appId);
 		}
 		_appId = [_appId lowercaseString];
 		_ttlDays = [plist[@"TimeToLive"] stringValue];
