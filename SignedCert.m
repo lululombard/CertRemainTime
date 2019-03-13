@@ -20,8 +20,12 @@
 			NSLog(@"[CertRemainTime] KYESoundsAPP:_appId = %@", _appId);
 		}
 		if ([_appId rangeOfString:@"admin test"].location != NSNotFound) { 
-			_appId = @"ignition"; // Ignition/Jailbreaks.fun - 13/3/2019
+			_appId = @"ignition"; // Ignition - 13/3/2019
 			NSLog(@"[CertRemainTime] admin test:_appId = %@", _appId);
+		}
+		if ([_appId rangeOfString:@"shandian"].location != NSNotFound) { 
+			_appId = @"ignition"; // Ignition - 13/3/2019
+			NSLog(@"[CertRemainTime] shandian:_appId = %@", _appId);
 		}
 		_appId = [_appId lowercaseString];
 		_ttlDays = [plist[@"TimeToLive"] stringValue];
