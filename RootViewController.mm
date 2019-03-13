@@ -61,7 +61,10 @@
 			[cert.appId rangeOfString:@"h3lix"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"electra"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"liberios"].location != NSNotFound ||
-			[cert.appId rangeOfString:@"meridian"].location != NSNotFound)
+			[cert.appId rangeOfString:@"meridian"].location != NSNotFound ||
+			[cert.appId rangeOfString:@"unc0ver"].location != NSNotFound ||
+			[cert.appId rangeOfString:@"tweakbox"].location != NSNotFound ||
+			[cert.appId rangeOfString:@"ignition"].location != NSNotFound)
 		{
 			if (!usingCert || [cert.expireDate compare:usingCert.expireDate] == NSOrderedDescending) {
 				usingCert = cert;
@@ -69,9 +72,13 @@
 		}
 	}
 
-	if (usingCert != NULL) errCode = 0;
+	if (usingCert != NULL) {
+		errCode = 0;
+	}
 
-	if (errCode < 0 && usingCert.expireDate != NULL) errCode = 3;
+	if (errCode < 0 && usingCert.expireDate != NULL) {
+		errCode = 3;
+	}
 
 	NSLog(@"[CertRemainTime] errCode = %@", [NSString stringWithFormat:@"%i", errCode]);
 	NSLog(@"[CertRemainTime] defFormat = %@", defFormat);
@@ -165,12 +172,33 @@
 				remaining = [remaining stringByAppendingString:[minutesString stringByAppendingString:(minutesBetween == 1 ? @" minute" : @" minutes")]];
 			}
 		}
-		NSLog(@"[CertRemainTime] Remaining = %@", remaining);
-		[label3 setText:[[state stringByAppendingString:@" "] stringByAppendingString:remaining]];
+
+		// Fix for TweakBox
+		if ([usingCert.appId isEqual:@"tweakbox"]) {
+			NSLog(@"[CertRemainTime] Remaining = %@ - TweakBox detected!", remaining);
+			[label3 setText:[[[state stringByAppendingString:@" "] stringByAppendingString:remaining] stringByAppendingString:@"\n\nTweakBox profile found!"
+				"\nDue to the way TweakBox signs"
+				"\ntheir apps, the name of the tool"
+				"\ncannot be determined."]];
+		}
+		// Fix for Ignition
+		if ([usingCert.appId isEqual:@"ignition"]) {
+			NSLog(@"[CertRemainTime] Remaining = %@ - Ignition detected!", remaining);
+			[label3 setText:[[[state stringByAppendingString:@" "] stringByAppendingString:remaining] stringByAppendingString:@"\n\nIgnition profile found!"
+				"\nDue to the way Ignition signs"
+				"\ntheir apps, the name of the tool"
+				"\ncannot be determined."]];
+		}
+		else {
+			NSLog(@"[CertRemainTime] Remaining = %@", remaining);
+			[label3 setText:[[state stringByAppendingString:@" "] stringByAppendingString:remaining]];
+		}
+
 	}
 	
 	[label3 sizeToFit];
 	label3.translatesAutoresizingMaskIntoConstraints = NO;
+	label3.numberOfLines = 0;
 	[label3 setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self view] addSubview:label3];
 
@@ -224,7 +252,7 @@
 	label7.textColor = [UIColor blackColor];
 	label7.backgroundColor = [UIColor clearColor];
 	label7.textAlignment = NSTextAlignmentCenter;
-	if (errCode == 1 || errCode == 2) [label7 setText:@"- Other ? contact@lululombard.fr"];
+	if (errCode == 1 || errCode == 2) [label7 setText:@"- Other? contact@lululombard.fr"];
 	else if (errCode == 3) [label7 setText:@"- Calendar used (Gregorian or other)"];
 	else [label7 setText:[@"Certificate duration : " stringByAppendingString:[usingCert.ttlDays stringByAppendingString:@" days"]]];
 	[label7 sizeToFit];
@@ -240,7 +268,7 @@
 	footer.textAlignment = NSTextAlignmentCenter;
 	if (errCode == 1 || errCode == 2) [footer setText:@"Send /var/MobileDevice/ProvisioningProfiles via mail"];
 	else if (errCode == 3) [footer setText:@"contact@lululombard.fr"];
-	else [footer setText:@"Any issues ? contact@lululombard.fr"];
+	else [footer setText:@"Any issues? contact@lululombard.fr"];
 	[footer sizeToFit];
 	footer.translatesAutoresizingMaskIntoConstraints = NO;
 	[footer setAutoresizingMask: UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
