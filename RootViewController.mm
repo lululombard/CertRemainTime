@@ -63,7 +63,8 @@
 			[cert.appId rangeOfString:@"liberios"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"meridian"].location != NSNotFound ||
 			[cert.appId rangeOfString:@"unc0ver"].location != NSNotFound ||
-			[cert.appId rangeOfString:@"tweakbox"].location != NSNotFound)
+			[cert.appId rangeOfString:@"tweakbox"].location != NSNotFound ||
+			[cert.appId rangeOfString:@"ignition"].location != NSNotFound)
 		{
 			if (!usingCert || [cert.expireDate compare:usingCert.expireDate] == NSOrderedDescending) {
 				usingCert = cert;
@@ -172,6 +173,7 @@
 			}
 		}
 
+		// Fix for TweakBox
 		if ([usingCert.appId isEqual:@"tweakbox"]) {
 			NSLog(@"[CertRemainTime] Remaining = %@ - TweakBox detected!", remaining);
 			[label3 setText:[[[state stringByAppendingString:@" "] stringByAppendingString:remaining] stringByAppendingString:@"\n\nTweakBox profile found!"
@@ -179,8 +181,16 @@
 				"\ntheir apps, the name of the tool"
 				"\ncannot be determined."]];
 		}
+		// Fix for Ignition
+		if ([usingCert.appId isEqual:@"ignition"]) {
+			NSLog(@"[CertRemainTime] Remaining = %@ - Ignition detected!", remaining);
+			[label3 setText:[[[state stringByAppendingString:@" "] stringByAppendingString:remaining] stringByAppendingString:@"\n\nIgnition profile found!"
+				"\nDue to the way Ignition signs"
+				"\ntheir apps, the name of the tool"
+				"\ncannot be determined."]];
+		}
 		else {
-			NSLog(@"[CertRemainTime] Remaining = %@ - TweakBox detected", remaining);
+			NSLog(@"[CertRemainTime] Remaining = %@", remaining);
 			[label3 setText:[[state stringByAppendingString:@" "] stringByAppendingString:remaining]];
 		}
 
